@@ -1,6 +1,5 @@
 workspace(name = "com_github_stackb_buildkube")
 
-
 #####################################################################
 # distroless_bazel
 #####################################################################
@@ -48,12 +47,8 @@ k8s_repositories()
 load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults")
 
 k8s_defaults(
-    # This becomes the name of the @repository and the rule
-    # you will import in your BUILD files.
     name = "k8s_deploy",
     kind = "deployment",
-    # This is the name of the cluster as it appears in:
-    #   kubectl config current-context
     cluster = "gke_stackb-151821_us-central1-a_cluster-1",
 )
 
