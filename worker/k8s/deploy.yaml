@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: buildkube-worker
+  labels:
+    k8s-app: buildkube-worker
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: buildkube-worker
+    spec:
+      containers:
+      - name: buildkube-worker
+        image: gcr.io/stackb-151821/buildkube-worker:latest

@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: buildkube-server
+  labels:
+    k8s-app: buildkube-server
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: buildkube-server
+    spec:
+      containers:
+      - name: buildkube-server
+        image: gcr.io/stackb-151821/buildkube-server:latest
+        ports:
+        - containerPort: 8980
+          name: grpc

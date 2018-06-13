@@ -1,0 +1,18 @@
+load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+
+container_image(
+    name = "image",
+    base = "@java_base//image",
+    cmd = [
+        "buildfarm-server_deploy.jar",
+        "/server.config",
+    ],
+    files = [
+        "server.config",
+        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
+    ],
+    ports = [
+        "8098",
+    ],
+    visibility = ["//server:__subpackages__"],
+)
