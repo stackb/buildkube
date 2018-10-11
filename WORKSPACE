@@ -1,5 +1,25 @@
 workspace(name = "com_github_stackb_buildkube")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+#####################################################################
+# rules_docker
+#####################################################################
+
+# RULES_DOCKER_VERSION = "7f61e98d7df54be9b2e0e4d46ec6ddf7f1b3ac0d"
+# RULES_DOCKER_SHA256 = "01bcef77bab3e9c1564f0d2ee84180ec85ba2781004a19de4acf21d4f17fa2c6"
+
+RULES_DOCKER_VERSION = "c9065d170c076d540166f068aec0e04039a10e66"
+RULES_DOCKER_SHA256 = "e1403c24f894b49bfd64f47b74a594687567c0180eddf43d014a565b3c5552e6"
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = RULES_DOCKER_SHA256,
+    strip_prefix = "rules_docker-" + RULES_DOCKER_VERSION,
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/%s.tar.gz" % RULES_DOCKER_VERSION],
+)
+
+
 #####################################################################
 # distroless_bazel
 #####################################################################
@@ -31,13 +51,17 @@ container_dependencies()
 # KUBERNETES
 #############################################################
 
-RULES_K8S_VERSION = "8537afcc8728e5ebfafa9b68462e54a98935d06b"
+# RULES_K8S_VERSION = "8537afcc8728e5ebfafa9b68462e54a98935d06b"
+# RULES_K8S_SHA256 = "2a8727f40c9988eb7d411908685454aae6f9dcda4ff3b210de8ff2e9798e919a"
+
+RULES_K8S_VERSION = "62ae7911ef60f91ed32fdd48a6b837287a626a80"
+RULES_K8S_SHA256 = "9bf9974199b3908a78638d3c7bd688bc2a69b3ddc857bd160399c58ca7fc18ea"
 
 http_archive(
     name = "io_bazel_rules_k8s",
     url = "https://github.com/bazelbuild/rules_k8s/archive/%s.zip" % RULES_K8S_VERSION,
     strip_prefix = "rules_k8s-" + RULES_K8S_VERSION,
-    sha256 = "2a8727f40c9988eb7d411908685454aae6f9dcda4ff3b210de8ff2e9798e919a",
+    sha256 = RULES_K8S_SHA256,
 )
 
 load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories")
@@ -49,7 +73,8 @@ load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults")
 k8s_defaults(
     name = "k8s_deploy",
     kind = "deployment",
-    cluster = "gke_stackb-151821_us-central1-a_cluster-1",
+    cluster = "gke_stackb-151821_us-central1-a_remote-execution",
+    #cluster = "gke_stackb-151821_us-central1-a_cluster-1",
 )
 
 
@@ -89,3 +114,36 @@ new_http_archive(
 load("@build_buildfarm//3rdparty:workspace.bzl", "maven_dependencies", "declare_maven")
 
 maven_dependencies(declare_maven)
+
+#####################################################################
+# BUILDGRID
+#####################################################################
+
+BUILDGRID_VERSION = "a49581a60a595fcca0ddb7beec958cf943f09cf7"
+
+load("//grid:workspace.bzl", "buildgrid_repository")
+
+buildgrid_repository(
+    name = "buildgrid_server",
+    commit = BUILDGRID_VERSION,
+)
+
+buildgrid_repository(
+    name = "buildgrid_worker",
+    commit = BUILDGRID_VERSION,
+    dockerfile = "//grid/worker:Dockerfile",
+)
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    container_repositories = "repositories",
+    "container_pull",
+)
+
+container_pull(
+    name = "rbe_ubuntu",
+    registry = "gcr.io",
+    repository = "cloud-marketplace/google/rbe-ubuntu16-04",
+    digest = "sha256:9bd8ba020af33edb5f11eff0af2f63b3bcb168cd6566d7b27c6685e717787928",
+    #tag = "latest",
+)

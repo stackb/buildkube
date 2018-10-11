@@ -1,0 +1,24 @@
+load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+
+container_image(
+    name = "image",
+    base = "@buildgrid_server//image",
+    entrypoint = ["/root/.local/bin/bgd"],
+    cmd = ["server", "start", "/server.conf"],
+    files = [
+        "server.conf",
+    ],
+    ports = [
+        "50051",
+    ],
+    workdir = "/",
+    visibility = ["//grid/server:__subpackages__"],
+)
+
+container_test(
+    name = "structure",
+    image = ":image",
+    configs = ["structure-tests.yaml"],
+    size = "small",
+)

@@ -1,0 +1,17 @@
+
+schemaVersion: '2.0.0' 
+
+#
+# Structure tests specific to server
+#
+
+metadataTest:
+  cmd: ["server", "start", "/server.conf"]
+  entrypoint: ["/root/.local/bin/bgd"]
+
+fileExistenceTests:
+- name: "server config file"
+  path: "/server.conf"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"
+

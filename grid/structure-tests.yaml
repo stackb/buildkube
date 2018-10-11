@@ -1,0 +1,20 @@
+schemaVersion: '2.0.0' 
+
+#
+# Structure tests common to both server/worker
+#
+
+metadataTest:
+  entrypoint: ["/root/.local/bin/bgd"]
+  workdir: ""
+
+fileExistenceTests:
+- name: "bgd tool"
+  path: "/root/.local/bin/bgd"
+  shouldExist: true
+  permissions: "-rwxr-xr-x"
+
+commandTests:
+- name: "list operations"
+  command: "/root/.local/bin/bgd"
+  expectedOutput: [".*Start a local server instance.*"]

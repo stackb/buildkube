@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: buildgrid-worker
+  labels:
+    k8s-app: buildgrid-worker
+  namespace: default
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        k8s-app: buildgrid-worker
+    spec:
+      containers:
+      - name: buildgrid-worker
+        image: gcr.io/stack-build/buildgrid-worker:latest

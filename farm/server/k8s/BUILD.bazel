@@ -9,7 +9,7 @@ k8s_deploy(
 k8s_deploy(
     name = "deploy",
     images = {
-        "gcr.io/stack-build/buildkube-server:latest": "//server:image",
+        "gcr.io/stack-build/buildkube-server:latest": "//farm/server:image",
     },
     template = "deploy.yaml",
 )

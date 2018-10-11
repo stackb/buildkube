@@ -1,0 +1,24 @@
+load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
+
+k8s_deploy(
+    name = "service",
+    template = "service.yaml",
+)
+
+k8s_deploy(
+    name = "deploy",
+    images = {
+        "gcr.io/stack-build/buildgrid-server:latest": "//grid/server:image",
+    },
+    template = "deploy.yaml",
+)
+
+k8s_objects(
+    name = "k8s",
+    objects = [
+        ":service",
+        ":deploy",
+    ],
+    visibility = ["//visibility:public"],
+)

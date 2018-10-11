@@ -14,5 +14,5 @@ container_image(
     ports = [
         "8098",
     ],
-    visibility = ["//server:__subpackages__"],
+    visibility = ["//farm/server:__subpackages__"],
 )

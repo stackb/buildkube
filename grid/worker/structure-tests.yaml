@@ -1,0 +1,9 @@
+
+schemaVersion: '2.0.0'
+
+#
+# Structure tests specific to worker
+#
+
+metadataTest:
+  cmd: ["bot", "--remote=http://buildgrid-server:50051", "--parent=main", "host-tools"]

@@ -4,7 +4,7 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "deploy",
     images = {
-        "gcr.io/stack-build/buildkube-worker:latest": "//worker:image",
+        "gcr.io/stack-build/buildkube-worker:latest": "//farm/worker:image",
     },
     template = "deploy.yaml",
 )

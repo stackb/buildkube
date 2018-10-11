@@ -1,0 +1,139 @@
+load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load("@package_bundle//file:packages.bzl", "packages")
+
+# Export the dockerfile so that the repository rule can consume it
+exports_files(["Dockerfile"])
+
+container_image(
+    name = "base",
+    base = "@com_gitlab_buildgrid_buildgrid//image",
+    debs = [
+        packages["openjdk-8-jdk-headless"],
+        packages["libpython2.7-minimal"],
+
+        packages["python2.7-minimal"],
+        packages["libpython2.7-stdlib"],
+        packages["zlib1g-dev"],
+        packages["unzip"],
+        packages["zip"],
+        packages["libbz2-1.0"],
+        packages["bash"],
+        packages["dash"],
+        packages["libtinfo5"],
+        packages["base-files"],
+        packages["debianutils"],
+        packages["sensible-utils"],
+        packages["coreutils"],
+        packages["libacl1"],
+        packages["libattr1"],
+        packages["libselinux1"],
+        packages["libpcre3"],
+
+        # awk
+        packages["gawk"],
+        packages["libreadline7"],
+        packages["readline-common"],
+        packages["dpkg"],
+        packages["liblzma5"],
+        packages["tar"],
+        packages["libsigsegv2"],
+
+        # g++
+        packages["g++-6"],
+        packages["gcc-6"],
+        packages["cpp-6"],
+        packages["gcc-6-base"],
+        packages["binutils"],
+        packages["libcc1-0"],
+        packages["libgcc1"],
+        packages["libstdc++6"],
+        packages["libgcc-6-dev"],
+        packages["libasan3"],
+        packages["libatomic1"],
+        packages["libitm1"],
+        packages["liblsan0"],
+        packages["libmpx2"],
+        packages["libquadmath0"],
+        packages["libtsan0"],
+        packages["libubsan0"],
+        packages["libc6-dev"],
+        packages["libc-dev-bin"],
+        packages["linux-libc-dev"],
+        packages["libstdc++-6-dev"],
+        packages["libisl15"],
+        packages["libmpc3"],
+        packages["libmpfr4"],
+
+        # git
+        packages["git"],
+        packages["libcurl3-gnutls"],
+        packages["libcomerr2"],
+        packages["libgssapi-krb5-2"],
+        packages["libk5crypto3"],
+        packages["libkeyutils1"],
+        packages["libkrb5support0"],
+        packages["libkrb5-3"],
+        packages["libldap-2.4-2"],
+        packages["libldap-common"],
+        packages["libsasl2-2"],
+        packages["libsasl2-modules-db"],
+        packages["libgnutls30"],
+        packages["libidn2-0"],
+        packages["libhogweed4"],
+        packages["libnettle6"],
+        packages["libidn11"],
+        packages["libp11-kit0"],
+        packages["libffi6"],
+        packages["libtasn1-6"],
+        packages["libssh2-1"],
+        packages["librtmp1"],
+        packages["libpsl5"],
+        packages["libnghttp2-14"],
+        packages["libgcrypt20"],
+        packages["libgpg-error0"],
+        packages["libunistring0"],
+        packages["libexpat1"],
+        packages["perl"],
+        packages["libperl5.24"],
+        packages["libdb5.3"],
+        packages["libgdbm3"],
+        packages["perl-modules-5.24"],
+        packages["perl-base"],
+        packages["liberror-perl"],
+        packages["libgmp10"],
+    ],
+    env = {
+        "JAVA_HOME": "/usr/lib/jvm/java-8-openjdk-amd64",
+    },
+    symlinks = {
+        "/usr/bin/java": "/usr/lib/jvm/java-8-openjdk-amd64/bin/java",
+        "/usr/bin/javac": "/usr/lib/jvm/java-8-openjdk-amd64/bin/java",
+        "/usr/bin/jar": "/usr/lib/jvm/java-8-openjdk-amd64/bin/jar",
+        "/usr/bin/jarsigner": "/usr/lib/jvm/java-8-openjdk-amd64/bin/jarsigner",
+        "/usr/bin/javadoc": "/usr/lib/jvm/java-8-openjdk-amd64/bin/javadoc",
+        "/usr/bin/javap": "/usr/lib/jvm/java-8-openjdk-amd64/bin/javap",
+        "/usr/bin/gcc": "/usr/bin/gcc-6",
+        "/usr/bin/g++": "/usr/bin/g++-6",
+    },
+)
+
+
+container_image(
+    name = "image",
+    base = "@buildgrid_worker//image",
+    entrypoint = ["/root/.local/bin/bgd"],
+    cmd = ["bot", "--remote=http://buildgrid-server:50051", "--parent=main", "host-tools"],
+    workdir = "/",
+    visibility = ["//grid/worker:__subpackages__"],
+)
+
+container_test(
+    name = "structure",
+    image = ":image",
+    configs = [
+        "//grid:structure-tests",
+        "structure-tests.yaml",
+    ],
+    size = "small",
+)
