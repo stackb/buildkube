@@ -6,14 +6,16 @@ container_image(
     entrypoint = ["/usr/bin/java", "-jar"],
     cmd = [
         "buildfarm-worker_deploy.jar",
-        "--server_host_env",
-        "BUILDKUBE_SERVER_SERVICE_HOST",
-        "--server_port_env",
-        "BUILDKUBE_SERVER_SERVICE_PORT",
-        "/worker.config",
+
+        #"--server_host_env",
+        #"BUILDKUBE_SERVER_SERVICE_HOST",
+        #"--server_port_env",
+        #"BUILDKUBE_SERVER_SERVICE_PORT",
+        
+        "/worker.config.master",
     ],
     files = [
-        "worker.config",
+        "worker.config.master",
         "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-worker_deploy.jar",
     ],
     visibility = ["//worker:__subpackages__"],

@@ -5,10 +5,10 @@ container_image(
     base = "@java_base//image",
     cmd = [
         "buildfarm-server_deploy.jar",
-        "/server.config",
+        "/server.config.master",
     ],
     files = [
-        "server.config",
+        "server.config.master",
         "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
     ],
     ports = [

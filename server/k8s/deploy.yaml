@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: buildkube-server
-        image: gcr.io/stackb-151821/buildkube-server:latest
+        image: gcr.io/stack-build/buildkube-server:latest
         ports:
         - containerPort: 8980
           name: grpc

@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: buildkube-worker
-        image: gcr.io/stackb-151821/buildkube-worker:latest
+        image: gcr.io/stack-build/buildkube-worker:latest
