@@ -21,8 +21,6 @@ spec:
         - rbe_ubuntu1604|ubuntu-scheduler.barn.svc.cluster.local:8981
         ports:
         - containerPort: 8980
-          name: grpc
-          protocol: TCP
         resources:
           limits:
             cpu: "1"

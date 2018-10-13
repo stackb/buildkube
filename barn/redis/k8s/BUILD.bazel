@@ -7,6 +7,11 @@ k8s_deploy(
 )
 
 k8s_deploy(
+    name = "service",
+    template = "service.yaml",
+)
+
+k8s_deploy(
     name = "sentinel",
     template = "sentinel.yaml",
 )
@@ -15,6 +20,7 @@ k8s_objects(
     name = "k8s",
     objects = [
         ":master",
+        ":service",
         ":sentinel",
     ],
     visibility = ["//visibility:public"],

@@ -8,6 +8,15 @@ install:
 install_server:
 	bazel run //barn/server/k8s:k8s.apply
 
+install_scheduler:
+	bazel run //barn/scheduler/k8s:k8s.apply
+
+install_worker:
+	bazel run //barn/worker/k8s:k8s.apply
+
+install_configmap:
+	bazel run //barn/server/k8s:configmap.apply
+
 uninstall:
 	bazel run //barn/k8s:k8s.delete
 
@@ -16,6 +25,9 @@ pods:
 
 svc:
 	kubectl -n barn get svc -o wide
+
+config:
+	kubectl -n barn get cm config -o yaml
 
 # Port forward into the barn server.  Server is listening on 8980 but we expose
 # 50051 locally so the bazelrc file is the same for farm|grid|barn|rbe
@@ -37,9 +49,12 @@ logsw:
 abseil_clone:
 	(cd /tmp && git clone https://github.com/abseil/abseil-cpp.git)
 
+abseil_clean:
+	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel clean)
+
 abseil:
 	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel \
 		--bazelrc=/home/pcj/go/src/github.com/stackb/buildkube/bazelrc \
 		build //absl/... \
-		--remote_instance_name=main \
+		--remote_instance_name=rbe_ubuntu1604 \
 		--config=remote)

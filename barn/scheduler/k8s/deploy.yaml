@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   namespace: barn
   name: ubuntu-scheduler
-  labels:
-    platform: linux
 spec:
   replicas: 1
   selector:
@@ -20,7 +18,6 @@ spec:
         name: ubuntu-scheduler
         ports:
         - containerPort: 8981
-          name: grpc
         resources:
           limits:
             cpu: "1"

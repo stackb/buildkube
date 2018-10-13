@@ -1,34 +1,19 @@
 apiVersion: v1
-data:
-  blobstore.conf: |
-    content_addressable_storage {
-      size_distinguishing {
-        small {
-          redis {
-            endpoint: "redis-sentinel:26379"
-            db: 0
-          }
-        }
-        large {
-          s3 {
-            endpoint: "http://minio:9000"
-            access_key_id: "..."
-            secret_access_key: "..."
-            region: "eu-west-1"
-            disable_ssl: true
-            bucket: "content-addressable-storage"
-          }
-        }
-        cutoff_size_bytes: 1048576
-      }
-    }
-    action_cache {
-      redis {
-        endpoint: "redis-sentinel:26379"
-        db: 1
-      }
-    }
 kind: ConfigMap
 metadata:
   name: config
   namespace: barn
+data:
+  blobstore.conf: |
+    content_addressable_storage {
+      redis {
+        endpoint: "redis:6379"
+        db: 0
+      }
+    }
+    action_cache {
+      redis {
+        endpoint: "redis:6379"
+        db: 1
+      }
+    }

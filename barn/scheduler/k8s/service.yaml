@@ -5,8 +5,7 @@ metadata:
   name: ubuntu-scheduler
 spec:
   selector:
-    k8s-app: ubuntu-scheduler
+    app: ubuntu-scheduler
   ports:
   - port: 8981
     targetPort: 8981
-    name: grpc

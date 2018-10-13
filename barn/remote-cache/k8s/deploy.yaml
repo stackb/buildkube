@@ -13,7 +13,7 @@ spec:
         app: cache
     spec:
       containers:
-      - image: gcr.io/stack-build/buildkube/barn/cache:latest
+      - image: index.docker.io/buchgr/bazel-remote-cache:
         name: cache
         ports:
         - containerPort: 8080

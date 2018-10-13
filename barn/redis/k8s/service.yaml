@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: server
+  name: redis
   namespace: barn
 spec:
   selector:
-    app: server
+    name: redis
+    role: master
   ports:
-  - port: 8980
-    targetPort: 8980
+  - port: 6379
+    targetPort: 6379

@@ -2,7 +2,6 @@
 schemaVersion: '2.0.0' 
 
 metadataTest:
-  cmd: ["-scheduler", "scheduler:8981"]
   entrypoint: ["/app/barn/server/server"]
         
 fileExistenceTests:

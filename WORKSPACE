@@ -149,17 +149,22 @@ buildbarn_repositories()
 BUILDBARN_VERSION = "e4c05f8003ae7a9f80876ed8fe61cf9b0e4b0784"
 BUILDBARN_SHA256 = "e4f4abc2fa5ddcd50c1652d21a28973113408b50f5151fcbe570d985f8bc7599"
 
-http_archive(
+# http_archive(
+#     name = "buildbarn",
+#     strip_prefix = "bazel-buildbarn-" + BUILDBARN_VERSION,
+#     urls = ["https://github.com/EdSchouten/bazel-buildbarn/archive/%s.tar.gz" % BUILDBARN_VERSION],
+#     sha256 = BUILDBARN_SHA256,
+#     patch_cmds = [
+#         # Expose the go_library targets so we can build our own binaries / images
+#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_frontend/BUILD.bazel",
+#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_scheduler/BUILD.bazel",
+#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_worker/BUILD.bazel",
+#     ],
+# )
+
+local_repository(
     name = "buildbarn",
-    strip_prefix = "bazel-buildbarn-" + BUILDBARN_VERSION,
-    urls = ["https://github.com/EdSchouten/bazel-buildbarn/archive/%s.tar.gz" % BUILDBARN_VERSION],
-    sha256 = BUILDBARN_SHA256,
-    patch_cmds = [
-        # Expose the go_library targets so we can build our own binaries / images
-        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_frontend/BUILD.bazel",
-        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_scheduler/BUILD.bazel",
-        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_worker/BUILD.bazel",
-    ],
+    path = "/home/pcj/go/src/github.com/EdShouten/bazel-buildbarn",
 )
 
 load(
