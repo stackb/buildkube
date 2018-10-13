@@ -18,7 +18,7 @@ build:remote --strategy=Closure=remote
 build:remote --genrule_strategy=remote
 build:remote --define=EXECUTOR=remote
 
-build:remote --remote_cache=localhost:50051
-build:remote --remote_executor=localhost:50051
+build:remote --remote_cache=localhost:8980
+build:remote --remote_executor=localhost:8980
 build:remote --experimental_strict_action_env=true
 build:remote --remote_timeout=3600

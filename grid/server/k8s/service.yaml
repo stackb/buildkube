@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: buildgrid-server
-  namespace: default
+  name: server
+  namespace: grid
 spec:
   selector:
-    k8s-app: buildgrid-server
+    k8s-app: server
   ports:
-  - port: 50051
-    targetPort: 50051
-    name: grpc
+  - port: 8980
+    targetPort: 8980

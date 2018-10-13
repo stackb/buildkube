@@ -4,7 +4,7 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "deploy",
     images = {
-        "gcr.io/stack-build/buildgrid-worker:latest": "//grid/worker:image",
+        "gcr.io/stack-build/buildkube/grid/worker:latest": "//grid/worker:image",
     },
     template = "deploy.yaml",
 )
@@ -14,5 +14,4 @@ k8s_objects(
     objects = [
         ":deploy",
     ],
-    visibility = ["//visibility:public"],
 )

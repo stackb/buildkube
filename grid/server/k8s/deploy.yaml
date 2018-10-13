@@ -1,20 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: buildgrid-server
+  name: server
   labels:
-    k8s-app: buildgrid-server
-  namespace: default
+    k8s-app: server
+  namespace: grid
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        k8s-app: buildgrid-server
+        k8s-app: server
     spec:
       containers:
-      - name: buildgrid-server
-        image: gcr.io/stack-build/buildgrid-server:latest
+      - name: server
+        image: gcr.io/stack-build/buildkube/grid/server:latest
         ports:
-        - containerPort: 50051
-          name: grpc
+        - containerPort: 8980

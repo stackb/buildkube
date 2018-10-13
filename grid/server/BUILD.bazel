@@ -7,7 +7,7 @@ container_image(
     entrypoint = ["/root/.local/bin/bgd"],
     cmd = ["server", "start", "/server.conf"],
     files = ["server.conf"],
-    ports = ["50051"],
+    ports = ["8980"],
     workdir = "/app",
     visibility = ["//grid/server:__subpackages__"],
 )

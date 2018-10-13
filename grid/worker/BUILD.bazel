@@ -8,7 +8,6 @@ container_image(
     name = "image",
     base = "@buildgrid_worker//image",
     entrypoint = ["/root/.local/bin/bgd"],
-    cmd = ["bot", "--remote=http://buildgrid-server:50051", "--parent=main", "host-tools"],
     workdir = "/app",
     visibility = ["//grid/worker:__subpackages__"],
 )

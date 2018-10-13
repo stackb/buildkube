@@ -1,17 +1,22 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: buildgrid-worker
+  name: worker
   labels:
-    k8s-app: buildgrid-worker
-  namespace: default
+    k8s-app: worker
+  namespace: grid
 spec:
-  replicas: 5
+  replicas: 3
   template:
     metadata:
       labels:
-        k8s-app: buildgrid-worker
+        k8s-app: worker
     spec:
       containers:
-      - name: buildgrid-worker
-        image: gcr.io/stack-build/buildgrid-worker:latest
+      - name: worker
+        image: gcr.io/stack-build/buildkube/grid/worker:latest
+        args:
+        - bot
+        - --remote=http://server.grid.svc.cluster.local:8980
+        - --parent=main
+        - host-tools

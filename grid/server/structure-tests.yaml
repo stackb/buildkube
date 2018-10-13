@@ -1,4 +1,3 @@
-
 schemaVersion: '2.0.0' 
 
 #
@@ -7,6 +6,7 @@ schemaVersion: '2.0.0'
 
 metadataTest:
   cmd: ["server", "start", "/server.conf"]
+  exposedPorts: ["8980"]
   entrypoint: ["/root/.local/bin/bgd"]
 
 fileExistenceTests:
