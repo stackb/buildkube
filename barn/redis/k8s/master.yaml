@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: redis
+    redis-sentinel: "true"
+    role: master
+  name: redis-master
+  namespace: barn
+spec:
+  containers:
+    - name: master
+      image: k8s.gcr.io/redis:v1
+      env:
+        - name: MASTER
+          value: "true"
+      ports:
+        - containerPort: 6379
+      resources:
+        limits:
+          cpu: "0.1"
+      volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+    - name: sentinel
+      image: kubernetes/redis:v1
+      env:
+        - name: SENTINEL
+          value: "true"
+      ports:
+        - containerPort: 26379
+  volumes:
+    - name: data
+      emptyDir: {}
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+  namespace: barn
+spec:
+  replicas: 3
+  selector:
+    name: redis
+  template:
+    metadata:
+      labels:
+        name: redis
+        role: master
+    spec:
+      containers:
+      - name: redis
+        image: k8s.gcr.io/redis:v1
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            cpu: "0.1"
+        volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+      volumes:
+        - name: data

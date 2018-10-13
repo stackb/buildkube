@@ -38,3 +38,9 @@ buildgrid_abseil_test:
 		build //absl/... \
 		--remote_instance_name=main \
 		--config=remote --jobs=3)
+
+buildgrid_protor:
+	(cd /tmp/protor && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel --bazelrc=/home/pcj/go/src/github.com/stackb/buildkube/grid/server/latest.bazelrc \
+		build //... \
+		--remote_instance_name=main \
+		--config=remote --jobs=3)

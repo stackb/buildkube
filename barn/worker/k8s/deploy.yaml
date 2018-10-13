@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ubuntu-worker
+  labels:
+    k8s-app: ubuntu-worker
+  namespace: barn
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        k8s-app: ubuntu-worker
+    spec:
+      containers:
+      - name: ubuntu-worker
+        image: gcr.io/stack-build/buildkube/barn/ubuntu-worker:latest
+        args: 
+        - -scheduler
+        - rbe_ubuntu1604|ubuntu-scheduler.barn.svc.cluster.local:8981
+        volumeMounts:
+        - mountPath: /config
+          name: config
+      volumes:
+      - configMap:
+          defaultMode: 400
+          name: config
+        name: config

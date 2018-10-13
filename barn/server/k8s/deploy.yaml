@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: server
+  namespace: barn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: gcr.io/stack-build/buildkube/barn/server:latest
+        args: 
+        - -scheduler
+        - rbe_ubuntu1604|ubuntu-scheduler.barn.svc.cluster.local:8981
+        ports:
+        - containerPort: 8980
+          name: grpc
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /config
+          name: config
+      volumes:
+      - configMap:
+          defaultMode: 400
+          name: config
+        name: config

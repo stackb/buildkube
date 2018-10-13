@@ -1,16 +1,26 @@
 load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 container_image(
     name = "image",
-    base = "@com_github_stackb_distroless_bazel//:bazel_0.14.1",
+    base = "@rbe_ubuntu//image",
     entrypoint = ["/usr/bin/java", "-jar"],
     cmd = [
-        "buildfarm-worker_deploy.jar",        
-        "/worker.config.master",
+        "/worker.jar",        
+        "/worker.config",
     ],
     files = [
-        "worker.config.master",
-        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-worker_deploy.jar",
+        "worker.config",
+        "@buildfarm//:worker",
     ],
     visibility = ["//farm/worker:__subpackages__"],
+)
+
+container_test(
+    name = "structure",
+    image = ":image",
+    configs = [
+        "structure-tests.yaml",
+    ],
+    size = "small",
 )

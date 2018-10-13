@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+
+go_binary(
+    name = "server",
+    goos = "linux",
+    goarch = "amd64",
+    pure = "on",
+    embed = ["@buildbarn//cmd/bbb_frontend:go_default_library"],
+)
+
+go_image(
+    name = "image",
+    binary = ":server",
+    visibility = ["//barn/server:__subpackages__"],
+)
+
+container_test(
+    name = "structure",
+    image = ":image",
+    configs = [
+        "structure-tests.yaml",
+    ],
+    size = "small",
+)

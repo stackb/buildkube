@@ -1,0 +1,26 @@
+
+schemaVersion: '2.0.0' 
+
+#
+# Structure tests specific to server
+#
+
+metadataTest:
+  cmd: ["/server.jar", "/server.config.master"]
+  entrypoint: ["/usr/bin/java", "-jar"]
+
+fileExistenceTests:
+- name: "server config file"
+  path: "/server.config.master"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"
+
+- name: "server jar"
+  path: "/server.jar"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"
+
+- name: "server config"
+  path: "/server.config.master"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"

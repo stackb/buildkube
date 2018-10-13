@@ -2,14 +2,14 @@ load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
 load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 
 k8s_deploy(
-    name = "svc",
-    template = "svc.yaml",
+    name = "service",
+    template = "service.yaml",
 )
 
 k8s_deploy(
     name = "deploy",
     images = {
-        "gcr.io/stack-build/buildkube-server:latest": "//farm/server:image",
+        "gcr.io/stack-build/buildfarm-server:latest": "//farm/server:image",
     },
     template = "deploy.yaml",
 )
@@ -17,7 +17,7 @@ k8s_deploy(
 k8s_objects(
     name = "k8s",
     objects = [
-        ":svc",
+        ":service",
         ":deploy",
     ],
     visibility = ["//visibility:public"],

@@ -1,0 +1,21 @@
+
+schemaVersion: '2.0.0' 
+
+#
+# Structure tests specific to worker
+#
+
+metadataTest:
+  cmd: ["/worker.jar", "/worker.config"]
+  entrypoint: ["/usr/bin/java", "-jar"]
+
+fileExistenceTests:
+- name: "worker config file"
+  path: "/worker.config"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"
+
+- name: "worker jar"
+  path: "/worker.jar"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"

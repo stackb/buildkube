@@ -1,18 +1,28 @@
 load("@io_bazel_rules_docker//container:image.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 container_image(
     name = "image",
-    base = "@java_base//image",
+    base = "@java_image_base//image",
     cmd = [
-        "buildfarm-server_deploy.jar",
+        "/server.jar",
         "/server.config.master",
     ],
     files = [
         "server.config.master",
-        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
+        "@buildfarm//:server",
     ],
     ports = [
         "8098",
     ],
     visibility = ["//farm/server:__subpackages__"],
+)
+
+container_test(
+    name = "structure",
+    image = ":image",
+    configs = [
+        "structure-tests.yaml",
+    ],
+    size = "small",
 )

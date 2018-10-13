@@ -1,0 +1,13 @@
+
+schemaVersion: '2.0.0' 
+
+metadataTest:
+  cmd: ["-scheduler", "scheduler:8981"]
+  entrypoint: ["/app/barn/worker/worker"]
+        
+fileExistenceTests:
+- name: "worker binary"
+  path: "/app/barn/worker/worker.runfiles/com_github_stackb_buildkube/barn/worker/linux_amd64_pure_stripped/worker"
+  shouldExist: true
+  permissions: "-r-xr-xr-x"
+

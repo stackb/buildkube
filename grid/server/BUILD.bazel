@@ -6,19 +6,18 @@ container_image(
     base = "@buildgrid_server//image",
     entrypoint = ["/root/.local/bin/bgd"],
     cmd = ["server", "start", "/server.conf"],
-    files = [
-        "server.conf",
-    ],
-    ports = [
-        "50051",
-    ],
-    workdir = "/",
+    files = ["server.conf"],
+    ports = ["50051"],
+    workdir = "/app",
     visibility = ["//grid/server:__subpackages__"],
 )
 
 container_test(
     name = "structure",
     image = ":image",
-    configs = ["structure-tests.yaml"],
+    configs = [
+        "//grid:structure-tests",
+        "structure-tests.yaml",
+    ],
     size = "small",
 )

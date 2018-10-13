@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cache
+  namespace: barn
+spec:
+  selector:
+    matchLabels:
+      app: cache
+  template:
+    metadata:
+      labels:
+        app: cache
+    spec:
+      containers:
+      - image: gcr.io/stack-build/buildkube/barn/cache:latest
+        name: cache
+        ports:
+        - containerPort: 8080
+          protocol: TCP

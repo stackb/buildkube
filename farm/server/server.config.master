@@ -55,43 +55,6 @@ instances {
   }
 }
 
-# another instance, provided to indicate multiplexing configs
-instances {
-  name: "another_memory_instance"
-
-  # hash functions may be different between instances
-  hash_function: SHA1
-
-  memory_instance_config: {
-    list_operations_default_page_size: 1024
-    list_operations_max_page_size: 16384
-
-    tree_default_page_size: 1024
-    tree_max_page_size: 16384
-
-    operation_poll_timeout: {
-      seconds: 30
-      nanos: 0
-    }
-
-    operation_completed_delay: {
-      seconds: 10
-      nanos: 0
-    }
-
-    cas_max_size_bytes: 655360 # 640k
-
-    default_action_timeout: {
-      seconds: 600
-      nanos: 0
-    }
-
-    maximum_action_timeout: {
-      seconds: 3600
-      nanos: 0
-    }
-  }
-}
 
 # the listening port of the buildfarm grpc server
 port: 8980

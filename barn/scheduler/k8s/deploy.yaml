@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: barn
+  name: ubuntu-scheduler
+  labels:
+    platform: linux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-scheduler
+  template:
+    metadata:
+      labels:
+        app: ubuntu-scheduler
+    spec:
+      containers:
+      - image: gcr.io/stack-build/buildkube/barn/scheduler:latest
+        name: ubuntu-scheduler
+        ports:
+        - containerPort: 8981
+          name: grpc
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 128Mi

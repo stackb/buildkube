@@ -1,0 +1,5 @@
+filegroup(
+    name = "structure-tests",
+    srcs = ["structure-tests.yaml"],
+    visibility = ["//farm:__subpackages__"],
+)
