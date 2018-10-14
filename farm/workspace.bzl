@@ -3,12 +3,12 @@ load("@io_bazel_rules_docker//container:load.bzl", "container_load")
 BUILD_BAZEL = """
 java_import(
     name = "server",
-    jars = ["server.jar"],
+    jars = ["buildfarm-server_deploy.jar"],
     visibility = ["//visibility:public"],
 )
 java_import(
     name = "worker",
-    jars = ["worker.jar"],
+    jars = ["buildfarm-worker_deploy.jar"],
     visibility = ["//visibility:public"],
 )
 """
@@ -27,13 +27,12 @@ def _buildfarm_repository_impl(repository_ctx):
         commit = commit,
     )
 
-    print("Installing " + url)
-
     # Download and unarchive it!
     repository_ctx.download_and_extract(url, 
         stripPrefix = "-".join(["bazel-buildfarm", commit]),
     )
 
+    # Apply mods if requested
     for filename, commands in repository_ctx.attr.modifications.items():
         for command in commands:
             modify(repository_ctx, filename, command)
@@ -45,10 +44,10 @@ def _buildfarm_repository_impl(repository_ctx):
     if result.return_code: 
         fail("bazel build failed: %s" % result.stderr)
     
-    result = repository_ctx.execute(["cp", "bazel-bin/src/main/java/build/buildfarm/buildfarm-server_deploy.jar", "./server.jar"])
+    result = repository_ctx.execute(["cp", "bazel-bin/src/main/java/build/buildfarm/buildfarm-server_deploy.jar", "."])
     if result.return_code: 
         fail("copy failed: %s" % result.stderr)
-    result = repository_ctx.execute(["cp", "bazel-bin/src/main/java/build/buildfarm/buildfarm-worker_deploy.jar", "./worker.jar"])
+    result = repository_ctx.execute(["cp", "bazel-bin/src/main/java/build/buildfarm/buildfarm-worker_deploy.jar", "."])
     if result.return_code: 
         fail("copy failed: %s" % result.stderr)
 
@@ -65,7 +64,7 @@ buildfarm_repository = repository_rule(
             mandatory = True,
         ),
         "modifications": attr.string_list_dict(
-
+            doc = "Optional sed modifications to apply",
         ),
     }
 )

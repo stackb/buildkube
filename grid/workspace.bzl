@@ -20,10 +20,7 @@ def _buildgrid_repository_impl(repository_ctx):
     )
 
     if repository_ctx.attr.dockerfile:
-        dockerfile = repository_ctx.path(repository_ctx.attr.dockerfile)
-        result = repository_ctx.execute(["cp", dockerfile, "."], quiet = False)
-        if result.return_code: 
-            fail("copy dockerfile failed: %s" % result.stderr)
+        repository_ctx.file("Dockerfile", repository_ctx.attr.dockerfile)
 
     result = repository_ctx.execute(["docker", "build", "-t", tag, "."], quiet = False)
     if result.return_code: 
@@ -42,8 +39,8 @@ _buildgrid_repository = repository_rule(
         "remote": attr.string(
             default = "https://gitlab.com/BuildGrid/buildgrid/repository/archive.tar.gz",
         ),
-        "dockerfile": attr.label(
-            doc = "The Dockerfile to use when building the image.  Defaults to the one in the buildgrid repo",
+        "dockerfile": attr.string(
+            doc = "The Dockerfile content to use when building the image.",
         ),
         "commit": attr.string(
             mandatory = True,

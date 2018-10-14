@@ -10,11 +10,13 @@ container_image(
     ],
     files = [
         "server.config",
-        #"@buildfarm//:server",
-        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
+        "@build_buildfarm//:server",
+
+        # Use this one in conjunction with local_repository.bzl
+        #"@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
     ],
     ports = [
-        "8098",
+        "8980",
     ],
     visibility = ["//farm/server:__subpackages__"],
 )

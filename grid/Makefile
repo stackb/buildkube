@@ -1,4 +1,9 @@
 install:
+	bazel build \
+		//grid/k8s:k8s.apply \
+		//grid/server/k8s:k8s.apply \
+		//grid/worker/k8s:k8s.apply
+
 	bazel run //grid/k8s:k8s.apply
 	bazel run //grid/server/k8s:k8s.apply
 	bazel run //grid/worker/k8s:k8s.apply
@@ -6,20 +11,10 @@ install:
 uninstall:
 	bazel run //grid/k8s:k8s.delete
 
-pods:
-	kubectl -n grid get pods
-
-svc:
-	kubectl -n grid get svc -o wide
-
-sl:
-	kubectl -n grid logs --selector=k8s-app=server
-
-wl:
-	kubectl -n grid logs --selector=k8s-app=worker
-
-abseil_clone:
-	(cd /tmp && git clone https://github.com/abseil/abseil-cpp.git)
+port-forward:
+	kubectl -n grid port-forward \
+		`kubectl -n grid get pods --selector=k8s-app=server -o jsonpath='{.items[0].metadata.name}'` \
+		8980
 
 abseil:
 	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel \

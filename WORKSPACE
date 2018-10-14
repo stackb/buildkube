@@ -23,12 +23,17 @@ go_rules_dependencies()
 go_register_toolchains()
 
 
+#####################################################################
+# bazel_skylib
+#####################################################################
+
 http_archive(
     name = "bazel_skylib",
     sha256 = "b5f6abe419da897b7901f90cbab08af958b97a8f3575b0d3dd062ac7ce78541f",
     strip_prefix = "bazel-skylib-0.5.0",
     urls = ["https://github.com/bazelbuild/bazel-skylib/archive/0.5.0.tar.gz"],
 )
+
 
 #####################################################################
 # rules_docker
@@ -44,8 +49,9 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/archive/%s.tar.gz" % RULES_DOCKER_VERSION],
 )
 
+
 #############################################################
-# Containers
+# worker execution container
 #############################################################
 
 load(
@@ -54,11 +60,16 @@ load(
     "container_pull",
 )
 
+RBE_UBUNTU_REGISTRY = "gcr.io"
+RBE_UBUNTU_REPOSITORY = "cloud-marketplace/google/rbe-ubuntu16-04"
+RBE_UBUNTU_DIGEST = "sha256:9bd8ba020af33edb5f11eff0af2f63b3bcb168cd6566d7b27c6685e717787928"
+RBE_UBUNTU_TAG = "%s/%s@%s" % (RBE_UBUNTU_REGISTRY, RBE_UBUNTU_REPOSITORY, RBE_UBUNTU_DIGEST)
+
 container_pull(
     name = "rbe_ubuntu",
-    registry = "gcr.io",
-    repository = "cloud-marketplace/google/rbe-ubuntu16-04",
-    digest = "sha256:9bd8ba020af33edb5f11eff0af2f63b3bcb168cd6566d7b27c6685e717787928",
+    registry = RBE_UBUNTU_REGISTRY,
+    repository = RBE_UBUNTU_REPOSITORY,
+    digest = RBE_UBUNTU_DIGEST,
 )
 
 #############################################################
@@ -104,47 +115,25 @@ load("//farm:workspace.bzl", "buildfarm_repository")
 
 BUILDFARM_VERSION = "7f8f4c407041b5cd6795b28121cef7d3a3cbab2b"
 
-# buildfarm_repository(
-#     name = "buildfarm",
-#     commit = BUILDFARM_VERSION,
-#     modifications = {
-#         "src/main/java/build/buildfarm/server/BuildFarmServer.java": [
-#             '126iSystem.out.println("Starting Server...");',
-#         ],
-#         "src/main/java/build/buildfarm/server/ActionCacheService.java": [
-#             '38iSystem.out.format(\"ActionCacheService.getActionResult: %s\", request);',
-#         ],
-#         "src/main/java/build/buildfarm/server/ByteStreamService.java": [
-#             '291iSystem.out.format(\"ByteStreamService.write: %s\", request);',
-#             '134iSystem.out.format(\"ByteStreamService.read: %s\", request);',
-#         ],
-#         "src/main/java/build/buildfarm/server/ExecutionService.java": [
-#             '90iSystem.out.format(\"ExecutionService.execute: %s\", request);',
-#         ],
-#         # "src/main/java/build/buildfarm/server/OperationQueueService.java": [
-#         #     '74iSystem.out.format(\"OperationQueueService.take: %s\", request);',
-#         #     '93iSystem.out.format(\"OperationQueueService.put: %s\", request);',
-#         #     '117iSystem.out.format(\"OperationQueueService.poll: %s\", request);',
-#         # ],
-#         "src/main/java/build/buildfarm/worker/Executor.java": [
-#             '168iSystem.out.format(\"Executor.executeCommand: %s\", arguments);',
-#         ],
-#     },
-# )
-
-load("//farm:local_repository.bzl", "local_buildfarm_repository")
-
-local_buildfarm_repository(
-    path = "../../bazelbuild/bazel-buildfarm",
+buildfarm_repository(
+    name = "build_buildfarm",
+    commit = BUILDFARM_VERSION,
 )
 
-load("@build_buildfarm//3rdparty:workspace.bzl", "maven_dependencies", "declare_maven")
+# Switch to the following for local buildfarm development
+#
+# load("//farm:local_repository.bzl", "local_buildfarm_repository")
+# local_buildfarm_repository(
+#     path = "../../bazelbuild/bazel-buildfarm",
+# )
+# load("@build_buildfarm//3rdparty:workspace.bzl", "maven_dependencies", "declare_maven")
+# maven_dependencies(declare_maven)
 
-maven_dependencies(declare_maven)
 
 #####################################################################
 # BUILDGRID
 #####################################################################
+
 
 BUILDGRID_VERSION = "a49581a60a595fcca0ddb7beec958cf943f09cf7"
 
@@ -158,12 +147,20 @@ buildgrid_repository(
 buildgrid_repository(
     name = "buildgrid_worker",
     commit = BUILDGRID_VERSION,
-    dockerfile = "//grid/worker:Dockerfile",
+    dockerfile = """
+FROM {base_image_tag}
+RUN python3 -m pip install --upgrade setuptools pip
+WORKDIR /app
+COPY . .
+RUN pip install --user --editable .
+    """.format(base_image_tag = RBE_UBUNTU_TAG),
 )
+
 
 #####################################################################
 # BUILDBARN
 #####################################################################
+
 
 http_archive(
     name = "bazel_gazelle",
@@ -182,23 +179,23 @@ buildbarn_repositories()
 BUILDBARN_VERSION = "e4c05f8003ae7a9f80876ed8fe61cf9b0e4b0784"
 BUILDBARN_SHA256 = "e4f4abc2fa5ddcd50c1652d21a28973113408b50f5151fcbe570d985f8bc7599"
 
-# http_archive(
-#     name = "buildbarn",
-#     strip_prefix = "bazel-buildbarn-" + BUILDBARN_VERSION,
-#     urls = ["https://github.com/EdSchouten/bazel-buildbarn/archive/%s.tar.gz" % BUILDBARN_VERSION],
-#     sha256 = BUILDBARN_SHA256,
-#     patch_cmds = [
-#         # Expose the go_library targets so we can build our own binaries / images
-#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_frontend/BUILD.bazel",
-#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_scheduler/BUILD.bazel",
-#         "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_worker/BUILD.bazel",
-#     ],
-# )
-
-local_repository(
+http_archive(
     name = "buildbarn",
-    path = "/home/pcj/go/src/github.com/EdShouten/bazel-buildbarn",
+    strip_prefix = "bazel-buildbarn-" + BUILDBARN_VERSION,
+    urls = ["https://github.com/EdSchouten/bazel-buildbarn/archive/%s.tar.gz" % BUILDBARN_VERSION],
+    sha256 = BUILDBARN_SHA256,
+    patch_cmds = [
+        # Expose the go_library targets so we can build our own binaries / images
+        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_frontend/BUILD.bazel",
+        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_scheduler/BUILD.bazel",
+        "sed -i 's|//visibility:private|//visibility:public|g' cmd/bbb_worker/BUILD.bazel",
+    ],
 )
+
+# local_repository(
+#     name = "buildbarn",
+#     path = "../../EdShouten/bazel-buildbarn",
+# )
 
 load(
     "@io_bazel_rules_docker//go:image.bzl",
@@ -206,4 +203,3 @@ load(
 )
 
 go_image_repositories()
-
