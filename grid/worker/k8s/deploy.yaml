@@ -6,7 +6,7 @@ metadata:
     k8s-app: worker
   namespace: grid
 spec:
-  replicas: 16
+  replicas: 3
   template:
     metadata:
       labels:
