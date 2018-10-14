@@ -5,20 +5,17 @@ metadata:
   namespace: barn
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: server
   template:
     metadata:
       labels:
-        app: server
+        k8s-app: server
     spec:
       containers:
       - name: server
         image: gcr.io/stack-build/buildkube/barn/server:latest
         args: 
         - -scheduler
-        - main|ubuntu-scheduler.barn.svc.cluster.local:8981
+        - rbe_ubuntu1604|ubuntu-scheduler.barn.svc.cluster.local:8981
         ports:
         - containerPort: 8980
         resources:

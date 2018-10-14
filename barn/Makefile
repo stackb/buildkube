@@ -17,6 +17,6 @@ uninstall:
 
 port-forward:
 	kubectl -n barn port-forward \
-		`kubectl -n barn get pods --selector=app=server -o jsonpath='{.items[0].metadata.name}'` \
+		`kubectl -n barn get pods --selector=k8s-app=server -o jsonpath='{.items[0].metadata.name}'` \
 		8980
 

@@ -2,8 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: worker
-  labels:
-    k8s-app: worker
   namespace: grid
 spec:
   replicas: 16
@@ -18,5 +16,5 @@ spec:
         args:
         - bot
         - --remote=http://server.grid.svc.cluster.local:8980
-        - --parent=main
+        - --parent=rbe_ubuntu1604
         - host-tools

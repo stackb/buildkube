@@ -2,8 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ubuntu-worker
-  labels:
-    k8s-app: ubuntu-worker
   namespace: barn
 spec:
   replicas: 16

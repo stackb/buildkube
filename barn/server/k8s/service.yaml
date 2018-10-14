@@ -5,7 +5,7 @@ metadata:
   namespace: barn
 spec:
   selector:
-    app: server
+    k8s-app: server
   ports:
   - port: 8980
     targetPort: 8980

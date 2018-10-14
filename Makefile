@@ -5,7 +5,9 @@ abseil_clean:
 	(cd /tmp/abseil-cpp && bazel clean)
 
 abseil:
-	(cd /tmp/abseil-cpp && bazel --bazelrc=./bazelrc \
+	cp ./bazelrc /tmp
+	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel \
+		--bazelrc=/tmp/bazelrc \
 		build //absl/... \
-		--remote_instance_name=main \
+		--remote_instance_name=rbe_ubuntu1604 \
 		--config=remote)

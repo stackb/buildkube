@@ -43,8 +43,8 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
    cluster (should match `$ kubectl config current-context`)
 3. Build and deploy an implementation, for example: `$ (cd farm/ && make
    install)`
-4. Setup port-forwarding to the server implementation in your cluster `$ (cd
-   farm/ && make port-forward &)`
+4. In a separate terminal, establish port-forwarding to the server
+   implementation `$ (cd farm/ && make port-forward)`
 5. Clone the abseil repository as a test case: `$ make abseil_clone`
 6. Compile abseil remotely: `$ make abseil`
 

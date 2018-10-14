@@ -2,8 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: server
-  labels:
-    k8s-app: server
   namespace: farm
 spec:
   replicas: 1

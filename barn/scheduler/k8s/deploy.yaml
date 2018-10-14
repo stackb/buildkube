@@ -5,13 +5,10 @@ metadata:
   name: ubuntu-scheduler
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: ubuntu-scheduler
   template:
     metadata:
       labels:
-        app: ubuntu-scheduler
+        k8s-app: ubuntu-scheduler
     spec:
       containers:
       - image: gcr.io/stack-build/buildkube/barn/scheduler:latest
