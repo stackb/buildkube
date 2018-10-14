@@ -58,13 +58,14 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 * Consider adjusting `replicas` in the `deploy.yaml` files and/or `bazelrc`
   file.
 
+## Observations
 
-### General NOTES
+### General 
 
 * Logging in all 3 implementations is scant and makes debugging difficult.
   Prometheus metrics are available in the barn impl (not examined thus far).
 
-### BuildFarm NOTES
+### BuildFarm 
 
 * BuildFarm worker does not detect if server goes down.  Must manually `kubectl
   delete pod --selector=k8s-app=worker` when re-installing or updating server
@@ -75,14 +76,14 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
   In particular, the `worker.config` `container-image` key MUST be exactly
   matching the rbe_ubuntu image tag. 
 
-### BuildBarn NOTES
+### BuildBarn 
 
 * After spinning up a new install, the service seems flaky at first.  Tend to
   get several errors like: `/tmp/abseil-cpp/absl/utility/BUILD.bazel:22:1: C++
   compilation of rule '//absl/utility:utility_test' failed (Exit 34). Note:
   Remote connection/protocol failed with: execution failed catastrophically`.
 
-### BuildGrid NOTES
+### BuildGrid 
 
 * Worker does not auto-reconnect to a new server (like buildfarm).
 * Instance name (`main`) must match across the `bazelrc` `--instance_name=main`,
