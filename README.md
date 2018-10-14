@@ -58,7 +58,7 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 * Consider adjusting `replicas` in the `deploy.yaml` files and/or `bazelrc`
   file.
 
-## Observations
+## OBSERVATIONS
 
 ### General 
 
