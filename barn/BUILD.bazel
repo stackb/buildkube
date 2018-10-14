@@ -1,5 +1,0 @@
-filegroup(
-    name = "structure-tests",
-    srcs = ["structure-tests.yaml"],
-    visibility = ["//grid:__subpackages__"],
-)

@@ -81,7 +81,17 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 * After spinning up a new install, the service seems flaky at first.  Tend to
   get several errors like: `/tmp/abseil-cpp/absl/utility/BUILD.bazel:22:1: C++
   compilation of rule '//absl/utility:utility_test' failed (Exit 34). Note:
-  Remote connection/protocol failed with: execution failed catastrophically`.
+  Remote connection/protocol failed with: execution failed catastrophically`. 
+
+> NOTE(@EdShoueten): There are three ways that can be used to alleviate this
+> issue: 
+> - Spawn more workers on your cluster. 
+> - Pass in an explicit --jobs= to the build that is the same order of magnitude
+>   as the number of workers. 
+> - Tune this flag on the scheduler process:
+>   https://github.com/EdSchouten/bazel-buildbarn/blob/master/cmd/bbb_scheduler/main.go#L22
+>
+> [More details](https://groups.google.com/forum/#!topic/bazel-discuss/pPNIc9-liCE)
 
 ### BuildGrid 
 
