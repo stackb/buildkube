@@ -39,9 +39,9 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 ## INSTRUCTIONS
 
 1. Clone this repository
-2. Edit the `WORKSPACE` file `k8s_deploy` rule to point to your kubernetes
+2. Edit the `WORKSPACE` file `k8s_defaults` rule to point to your kubernetes
    cluster (should match `$ kubectl config current-context`)
-3. Build and deploy an implementation, for example: `$ (cd farm/ && make
+3. Build and deploy an implementation: for example: `$ (cd farm/ && make
    install)`
 4. In a separate terminal, establish port-forwarding to the server
    implementation `$ (cd farm/ && make port-forward)`
