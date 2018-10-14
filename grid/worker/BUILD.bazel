@@ -1,9 +1,6 @@
 load("@io_bazel_rules_docker//container:image.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
-# Export the dockerfile so that the repository rule can consume it
-exports_files(["Dockerfile"])
-
 container_image(
     name = "image",
     base = "@buildgrid_worker//image",
