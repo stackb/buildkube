@@ -25,10 +25,10 @@
 </table>
 
 buildkube uses [rules_docker] and [rules_k8s] to build and deploy
-[bazel-buildfarm], [bazel-buildbarn] and/or [buildgrid] into an existing
-kubernetes cluster.  These are the 3 known open-source server-side
-implementations of the [remote-execution-api] (REAPI), plus the closed source
-google Remote Build Execution
+[bazel-buildfarm] (java), [bazel-buildbarn] (golang) and/or [buildgrid] (python)
+into an existing kubernetes cluster.  These are the 3 known open-source
+server-side implementations of the [remote-execution-api] (REAPI), plus the
+closed source google Remote Build Execution
 ([RBE](https://groups.google.com/forum/#!forum/rbe-alpha-customers)) service
 (alpha).
 
@@ -59,6 +59,11 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
   file.
 
 
+### General NOTES
+
+* Logging in all 3 implementations is scant and makes debugging difficult.
+  Prometheus metrics are available in the barn impl (not examined thus far).
+
 ### BuildFarm NOTES
 
 * BuildFarm worker does not detect if server goes down.  Must manually `kubectl
@@ -70,12 +75,22 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
   In particular, the `worker.config` `container-image` key MUST be exactly
   matching the rbe_ubuntu image tag. 
 
-### BuildGrid NOTES
+### BuildBarn NOTES
 
 * After spinning up a new install, the service seems flaky at first.  Tend to
   get several errors like: `/tmp/abseil-cpp/absl/utility/BUILD.bazel:22:1: C++
   compilation of rule '//absl/utility:utility_test' failed (Exit 34). Note:
   Remote connection/protocol failed with: execution failed catastrophically`.
+
+### BuildGrid NOTES
+
+* Worker does not auto-reconnect to a new server (like buildfarm).
+* Instance name (`main`) must match across the `bazelrc` `--instance_name=main`,
+  server args `-scheduler main|ubuntu-scheduler:8981`, and worker args `bot
+  --remote=http://server:8980 --parent=main host-tools`
+* Overall robustness to changes (increases) in job size and worker size is low.
+  Seems to require resetting the server/workers in some cases.  Seems happiest
+  when job size matches worker replicas.
 
 [rules_docker]: https://github.com/bazelbuild/rules_docker 
 [rules_k8s]: https://github.com/bazelbuild/rules_k8s
