@@ -9,5 +9,5 @@ abseil:
 	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel \
 		--bazelrc=/tmp/bazelrc \
 		build //absl/... \
-		--remote_instance_name=rbe_ubuntu1604 \
+		--remote_instance_name=main \
 		--config=remote)

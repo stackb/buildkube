@@ -15,6 +15,6 @@ spec:
         image: gcr.io/stack-build/buildkube/grid/worker:latest
         args:
         - bot
-        - --remote=http://server.grid.svc.cluster.local:8980
-        - --parent=rbe_ubuntu1604
+        - --remote=http://server:8980
+        - --parent=main
         - host-tools

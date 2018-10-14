@@ -58,7 +58,8 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 * Consider adjusting `replicas` in the `deploy.yaml` files and/or `bazelrc`
   file.
 
-### MISC
+
+### BuildFarm NOTES
 
 * BuildFarm worker does not detect if server goes down.  Must manually `kubectl
   delete pod --selector=k8s-app=worker` when re-installing or updating server
@@ -68,6 +69,13 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
   a dict of key:value pairs that must match the action execution requirements.
   In particular, the `worker.config` `container-image` key MUST be exactly
   matching the rbe_ubuntu image tag. 
+
+### BuildGrid NOTES
+
+* After spinning up a new install, the service seems flaky at first.  Tend to
+  get several errors like: `/tmp/abseil-cpp/absl/utility/BUILD.bazel:22:1: C++
+  compilation of rule '//absl/utility:utility_test' failed (Exit 34). Note:
+  Remote connection/protocol failed with: execution failed catastrophically`.
 
 [rules_docker]: https://github.com/bazelbuild/rules_docker 
 [rules_k8s]: https://github.com/bazelbuild/rules_k8s

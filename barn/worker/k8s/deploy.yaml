@@ -15,7 +15,7 @@ spec:
         image: gcr.io/stack-build/buildkube/barn/ubuntu-worker:latest
         args: 
         - -scheduler
-        - ubuntu-scheduler.barn.svc.cluster.local:8981
+        - ubuntu-scheduler:8981
         volumeMounts:
         - mountPath: /config
           name: config

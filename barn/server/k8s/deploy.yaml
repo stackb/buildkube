@@ -15,7 +15,7 @@ spec:
         image: gcr.io/stack-build/buildkube/barn/server:latest
         args: 
         - -scheduler
-        - rbe_ubuntu1604|ubuntu-scheduler.barn.svc.cluster.local:8981
+        - main|ubuntu-scheduler:8981
         ports:
         - containerPort: 8980
         resources:
