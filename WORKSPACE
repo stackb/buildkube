@@ -96,7 +96,6 @@ k8s_defaults(
     name = "k8s_deploy",
     kind = "deployment",
     cluster = "gke_stackb-151821_us-central1-a_remote-execution",
-    #cluster = "gke_stackb-151821_us-central1-a_cluster-1",
 )
 
 
