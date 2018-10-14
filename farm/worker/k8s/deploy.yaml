@@ -1,17 +1,15 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: buildfarm-worker
-  labels:
-    k8s-app: buildfarm-worker
-  namespace: default
+  name: worker
+  namespace: farm
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
-        k8s-app: buildfarm-worker
+        k8s-app: worker
     spec:
       containers:
-      - name: buildfarm-worker
-        image: gcr.io/stack-build/buildfarm-worker:latest
+      - name: worker
+        image: gcr.io/stack-build/buildkube/farm/worker:latest

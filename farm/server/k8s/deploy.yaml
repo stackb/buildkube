@@ -1,20 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: buildfarm-server
+  name: server
   labels:
-    k8s-app: buildfarm-server
-  namespace: default
+    k8s-app: server
+  namespace: farm
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        k8s-app: buildfarm-server
+        k8s-app: server
     spec:
       containers:
-      - name: buildfarm-server
-        image: gcr.io/stack-build/buildfarm-server:latest
+      - name: server
+        image: gcr.io/stack-build/buildkube/farm/server:latest
         ports:
         - containerPort: 8980
-          name: grpc

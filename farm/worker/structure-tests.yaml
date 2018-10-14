@@ -6,7 +6,7 @@ schemaVersion: '2.0.0'
 #
 
 metadataTest:
-  cmd: ["/worker.jar", "/worker.config"]
+  cmd: ["/buildfarm-worker_deploy.jar", "/worker.config"]
   entrypoint: ["/usr/bin/java", "-jar"]
 
 fileExistenceTests:
@@ -16,6 +16,6 @@ fileExistenceTests:
   permissions: "-r-xr-xr-x"
 
 - name: "worker jar"
-  path: "/worker.jar"
+  path: "/buildfarm-worker_deploy.jar"
   shouldExist: true
   permissions: "-r-xr-xr-x"

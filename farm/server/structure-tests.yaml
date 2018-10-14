@@ -6,21 +6,21 @@ schemaVersion: '2.0.0'
 #
 
 metadataTest:
-  cmd: ["/server.jar", "/server.config.master"]
+  cmd: ["/buildfarm-server_deploy.jar", "/server.config"]
   entrypoint: ["/usr/bin/java", "-jar"]
 
 fileExistenceTests:
 - name: "server config file"
-  path: "/server.config.master"
+  path: "/server.config"
   shouldExist: true
   permissions: "-r-xr-xr-x"
 
 - name: "server jar"
-  path: "/server.jar"
+  path: "/buildfarm-server_deploy.jar"
   shouldExist: true
   permissions: "-r-xr-xr-x"
 
 - name: "server config"
-  path: "/server.config.master"
+  path: "/server.config"
   shouldExist: true
   permissions: "-r-xr-xr-x"

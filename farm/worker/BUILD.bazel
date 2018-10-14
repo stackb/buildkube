@@ -6,12 +6,13 @@ container_image(
     base = "@rbe_ubuntu//image",
     entrypoint = ["/usr/bin/java", "-jar"],
     cmd = [
-        "/worker.jar",        
+        "/buildfarm-worker_deploy.jar",
         "/worker.config",
     ],
     files = [
         "worker.config",
-        "@buildfarm//:worker",
+        # "@buildfarm//:worker",
+        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-worker_deploy.jar",
     ],
     visibility = ["//farm/worker:__subpackages__"],
 )

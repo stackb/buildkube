@@ -9,7 +9,7 @@ k8s_deploy(
 k8s_deploy(
     name = "deploy",
     images = {
-        "gcr.io/stack-build/buildfarm-server:latest": "//farm/server:image",
+        "gcr.io/stack-build/buildkube/farm/server:latest": "//farm/server:image",
     },
     template = "deploy.yaml",
 )
@@ -20,5 +20,4 @@ k8s_objects(
         ":service",
         ":deploy",
     ],
-    visibility = ["//visibility:public"],
 )

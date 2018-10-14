@@ -13,6 +13,13 @@ java_import(
 )
 """
 
+def modify(repository_ctx, filename, directive):
+    args = ["sed", "-i", directive, filename]
+    result = repository_ctx.execute(args)
+    if result.return_code: 
+        fail("%r failed: %s" % (args, result.stderr))
+
+
 def _buildfarm_repository_impl(repository_ctx):
     commit = repository_ctx.attr.commit
 
@@ -26,6 +33,10 @@ def _buildfarm_repository_impl(repository_ctx):
     repository_ctx.download_and_extract(url, 
         stripPrefix = "-".join(["bazel-buildfarm", commit]),
     )
+
+    for filename, commands in repository_ctx.attr.modifications.items():
+        for command in commands:
+            modify(repository_ctx, filename, command)
 
     result = repository_ctx.execute(["bazel", "build", 
         "//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
@@ -52,6 +63,9 @@ buildfarm_repository = repository_rule(
         ),
         "commit": attr.string(
             mandatory = True,
+        ),
+        "modifications": attr.string_list_dict(
+
         ),
     }
 )

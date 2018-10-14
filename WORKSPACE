@@ -102,12 +102,45 @@ java_image_repositories()
 
 load("//farm:workspace.bzl", "buildfarm_repository")
 
-BUILDFARM_VERSION = "8f5ccc689f7d8ad2d20343c94d3475b92412e587"
+BUILDFARM_VERSION = "7f8f4c407041b5cd6795b28121cef7d3a3cbab2b"
 
-buildfarm_repository(
-    name = "buildfarm",
-    commit = BUILDFARM_VERSION,
+# buildfarm_repository(
+#     name = "buildfarm",
+#     commit = BUILDFARM_VERSION,
+#     modifications = {
+#         "src/main/java/build/buildfarm/server/BuildFarmServer.java": [
+#             '126iSystem.out.println("Starting Server...");',
+#         ],
+#         "src/main/java/build/buildfarm/server/ActionCacheService.java": [
+#             '38iSystem.out.format(\"ActionCacheService.getActionResult: %s\", request);',
+#         ],
+#         "src/main/java/build/buildfarm/server/ByteStreamService.java": [
+#             '291iSystem.out.format(\"ByteStreamService.write: %s\", request);',
+#             '134iSystem.out.format(\"ByteStreamService.read: %s\", request);',
+#         ],
+#         "src/main/java/build/buildfarm/server/ExecutionService.java": [
+#             '90iSystem.out.format(\"ExecutionService.execute: %s\", request);',
+#         ],
+#         # "src/main/java/build/buildfarm/server/OperationQueueService.java": [
+#         #     '74iSystem.out.format(\"OperationQueueService.take: %s\", request);',
+#         #     '93iSystem.out.format(\"OperationQueueService.put: %s\", request);',
+#         #     '117iSystem.out.format(\"OperationQueueService.poll: %s\", request);',
+#         # ],
+#         "src/main/java/build/buildfarm/worker/Executor.java": [
+#             '168iSystem.out.format(\"Executor.executeCommand: %s\", arguments);',
+#         ],
+#     },
+# )
+
+load("//farm:local_repository.bzl", "local_buildfarm_repository")
+
+local_buildfarm_repository(
+    path = "../../bazelbuild/bazel-buildfarm",
 )
+
+load("@build_buildfarm//3rdparty:workspace.bzl", "maven_dependencies", "declare_maven")
+
+maven_dependencies(declare_maven)
 
 #####################################################################
 # BUILDGRID

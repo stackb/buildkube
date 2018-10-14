@@ -5,12 +5,13 @@ container_image(
     name = "image",
     base = "@java_image_base//image",
     cmd = [
-        "/server.jar",
-        "/server.config.master",
+        "/buildfarm-server_deploy.jar",
+        "/server.config",
     ],
     files = [
-        "server.config.master",
-        "@buildfarm//:server",
+        "server.config",
+        #"@buildfarm//:server",
+        "@build_buildfarm//src/main/java/build/buildfarm:buildfarm-server_deploy.jar",
     ],
     ports = [
         "8098",
