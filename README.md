@@ -1,4 +1,4 @@
-# BuildKube
+# buildkube
 
 <table><tr>
 <td>
@@ -24,7 +24,7 @@
 <td>Kubernetes</td>
 </table>
 
-BuildKube uses [rules_docker] and [rules_k8s] to build and deploy
+buildkube uses [rules_docker] and [rules_k8s] to build and deploy
 [bazel-buildfarm], [bazel-buildbarn] and/or [buildgrid] into an existing
 kubernetes cluster.  These are the 3 known open-source server-side
 implementations of the [remote-execution-api] (REAPI), plus the closed source
@@ -40,12 +40,13 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 
 1. Clone this repository
 2. Edit the `WORKSPACE` file `k8s_deploy` rule to point to your kubernetes
-   cluster (should match `kubectl config current-context`).
+   cluster (should match `$ kubectl config current-context`)
 3. Build and deploy an implementation, for example: `$ (cd farm/ && make
    install)`
-4. Clone the abseil repository as a test case: `$ make abseil_clone`
-5. Setup port-forwarding on your cluster `$ (cd farm/ && make port-forward &)`
-5. Compile abseil remotely: `$ (cd farm/ && make abseil)`.
+4. Setup port-forwarding to the server implementation in your cluster `$ (cd
+   farm/ && make port-forward &)`
+5. Clone the abseil repository as a test case: `$ make abseil_clone`
+6. Compile abseil remotely: `$ make abseil`
 
 ## NOTES
 
