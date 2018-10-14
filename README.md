@@ -1,4 +1,4 @@
-# buildkube
+# BuildKube
 
 <table><tr>
 <td>
@@ -24,10 +24,13 @@
 <td>Kubernetes</td>
 </table>
 
-Buildkube uses [rules_docker] and [rules_k8s] to build and deploy
+BuildKube uses [rules_docker] and [rules_k8s] to build and deploy
 [bazel-buildfarm], [bazel-buildbarn] and/or [buildgrid] into an existing
 kubernetes cluster.  These are the 3 known open-source server-side
-implementations of the [remote-execution-api] (REAPI).  
+implementations of the [remote-execution-api] (REAPI), plus the closed source
+google Remote Build Execution
+([RBE](https://groups.google.com/forum/#!forum/rbe-alpha-customers)) service
+(alpha).
 
 Known clients of the REAPI include [bazel](https://github.com/bazelbuild/bazel)
 itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
@@ -36,13 +39,25 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 ## INSTRUCTIONS
 
 1. Clone this repository
-2. Edit the `WORKSPACE` file `k8s_deploy` rule to point to your kubernetes cluster (should match `kubectl config current-context`).
-3. Build and deploy an implementation, for example: `$ (cd farm/ && make install)`
+2. Edit the `WORKSPACE` file `k8s_deploy` rule to point to your kubernetes
+   cluster (should match `kubectl config current-context`).
+3. Build and deploy an implementation, for example: `$ (cd farm/ && make
+   install)`
 4. Clone the abseil repository as a test case: `$ make abseil_clone`
 5. Setup port-forwarding on your cluster `$ (cd farm/ && make port-forward &)`
 5. Compile abseil remotely: `$ (cd farm/ && make abseil)`.
 
-### NOTES
+## NOTES
+
+* Bazel 0.17.1 or higher is required (primarily tested on 0.17.2 on an ubuntu
+  laptop).
+* Run all tests via `$ bazel test //...`.
+* Each implementation goes in its own namespace.  `$ kubectl get pods
+  --all-namespaces` to see all.
+* Consider adjusting `replicas` in the `deploy.yaml` files and/or `bazelrc`
+  file.
+
+### MISC
 
 * BuildFarm worker does not detect if server goes down.  Must manually `kubectl
   delete pod --selector=k8s-app=worker` when re-installing or updating server
@@ -53,8 +68,8 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
   In particular, the `worker.config` `container-image` key MUST be exactly
   matching the rbe_ubuntu image tag. 
 
-[rules-docker]: https://github.com/bazelbuild/rules_docker 
-[rules-k8s]: https://github.com/bazelbuild/rules_k8s
+[rules_docker]: https://github.com/bazelbuild/rules_docker 
+[rules_k8s]: https://github.com/bazelbuild/rules_k8s
 [bazel-buildfarm]: https://github.com/bazelbuild/bazel-buildfarm/
 [bazel-buildbarn]: https://github.com/EdShouten/bazel-buildbarn/
 [buildgrid]: https://gitlab.com/BuildGrid/buildgrid

@@ -3,7 +3,7 @@ setup:
 	curl -X GET -o /tmp/key.json "https://www.googleapis.com/storage/v1/b/bazel_key/o/key.json?alt=media"
 
 abseil:
-	(cd /tmp/abseil-cpp && /home/pcj/.cache/bzl/release/0.17.2/bin/bazel \
+	(cd /tmp/abseil-cpp && bazel \
 		--bazelrc=/home/pcj/go/src/github.com/stackb/buildkube/bazelrc \
 		build //absl/... \
 		--config=remote --jobs=300 \
