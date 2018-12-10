@@ -106,6 +106,6 @@ itself, [recc](https://gitlab.com/bloomberg/recc), and possibly
 [rules_docker]: https://github.com/bazelbuild/rules_docker 
 [rules_k8s]: https://github.com/bazelbuild/rules_k8s
 [bazel-buildfarm]: https://github.com/bazelbuild/bazel-buildfarm/
-[bazel-buildbarn]: https://github.com/EdShouten/bazel-buildbarn/
+[bazel-buildbarn]: https://github.com/EdSchouten/bazel-buildbarn/
 [buildgrid]: https://gitlab.com/BuildGrid/buildgrid
 [remote-execution-api]: https://github.com/bazelbuild/remote-apis
